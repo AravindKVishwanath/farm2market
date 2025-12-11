@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Scan, Plus, History, Search, Truck, Store, User } from 'lucide-react';
+import { Scan, Plus, History, Search, Truck, Store, User, ShoppingBag } from 'lucide-react';
 import { useBlockchain } from '../context/BlockchainContext';
 import { motion } from 'framer-motion';
 
@@ -36,11 +36,25 @@ const Dashboard = () => {
       <div className="grid grid-cols-2 gap-4 mb-8">
         <motion.button 
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/scan')}
-          className="bg-nature-600 text-white p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-3"
+          onClick={() => navigate('/market')}
+          className="col-span-2 bg-gradient-to-r from-nature-600 to-nature-500 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between px-6"
         >
+          <div className="flex flex-col items-start">
+            <span className="font-bold text-lg">Marketplace</span>
+            <span className="text-nature-100 text-sm">Buy & Sell Produce</span>
+          </div>
           <div className="bg-white/20 p-3 rounded-full">
-            <Scan className="w-6 h-6" />
+            <ShoppingBag className="w-6 h-6" />
+          </div>
+        </motion.button>
+
+        <motion.button 
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate('/scan')}
+          className="bg-white text-nature-700 border border-nature-100 p-5 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-3"
+        >
+          <div className="bg-nature-50 p-3 rounded-full">
+            <Scan className="w-6 h-6 text-nature-600" />
           </div>
           <span className="font-semibold">Scan QR</span>
         </motion.button>
@@ -80,11 +94,11 @@ const Dashboard = () => {
               {block.data.role === 'Farmer' && <User className="w-5 h-5" />}
               {block.data.role === 'Transporter' && <Truck className="w-5 h-5" />}
               {block.data.role === 'Retailer' && <Store className="w-5 h-5" />}
-              {block.data.role === 'System' && <History className="w-5 h-5" />}
+              {block.data.role === 'System' || block.data.role === 'SmartContract' ? <History className="w-5 h-5" /> : null}
             </div>
             <div className="flex-1">
               <h4 className="font-semibold text-gray-800">{block.data.product}</h4>
-              <p className="text-xs text-gray-500">{new Date(block.timestamp).toLocaleString()}</p>
+              <p className="text-xs text-gray-500">{block.data.action || new Date(block.timestamp).toLocaleString()}</p>
             </div>
             <div className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">
               #{block.index}
